@@ -26,6 +26,8 @@ export class UserService {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
+
+
     const passwordValid = await this.authService.comparePasswords(password, user.password);
     if (!passwordValid) {
       throw new UnauthorizedException('Credenciais inválidas');
@@ -34,7 +36,6 @@ export class UserService {
     const token = await this.authService.generateToken({ id: user.id, email: user.email });
     return { token };
   }
-
   async deleteUser(userId: string): Promise<void> {
     const user = await this.userRepository.findById(userId);
     if (!user) {

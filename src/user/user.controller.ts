@@ -9,13 +9,13 @@ export class UserController {
   
 
   @Post('register')
-  async register(@Body() body: { username : string; password: string }) {
-    return this.userService.register(body.username, body.password);
+  async register(@Body() body: { email: string; password: string }) {
+    return this.userService.register(body.email, body.password);
   }
 
   @Post('login')
-  async login(@Body() body: { username: string; password: string,}) {
-    return this.userService.login(body.username, body.password);
+  async login(@Body() body: { email: string; password: string,}) {
+    return this.userService.login(body.email, body.password);
   }
 
   @Delete(':id')

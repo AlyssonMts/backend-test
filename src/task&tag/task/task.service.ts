@@ -6,6 +6,7 @@ import { CreateTaskDto, TaskParameters, TaskPriorityEnum, TaskStatusEnum } from 
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
+import { decode } from 'punycode';
 
 @Injectable()
 export class TaskService {
@@ -29,11 +30,11 @@ export class TaskService {
     }
 
     const token = authHeader.split(' ')[1];
-    try {
+    try {  
       const decoded = await this.jwtService.verifyAsync(token, {
         secret: this.jwtSecret,
       });
-      return decoded.sub;
+      return decoded.id;
     } catch {
       throw new HttpException('Invalid or expired token', HttpStatus.UNAUTHORIZED);
     }
@@ -52,8 +53,9 @@ export class TaskService {
    * Criação de uma nova tarefa.
    */
   async create(taskData: CreateTaskDto, request: Request): Promise<Task> {
+    
     const userId = await this.extractUserIdFromToken(request);
-
+  
     const createdTask = new this.taskModel({
       title: taskData.title,
       status: TaskStatusEnum.IN_PROGRESS,

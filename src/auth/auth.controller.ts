@@ -8,7 +8,7 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    async signIn(@Body('email') username: string, @Body('password') password: string):Promise<boolean> {
-        return this.authService.comparePasswords(username, password)
+    async signIn(@Body('email') email: string, @Body('password') password: string):Promise<boolean> {
+        return this.authService.comparePasswords(email, password)
     }
 }
