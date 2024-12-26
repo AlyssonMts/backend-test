@@ -1,11 +1,11 @@
 # API de Gerenciamento de Tarefas
 
 ## 📝 Sobre
-API RESTful para gerenciamento de tarefas e etiquetas, permitindo que usuários organizem suas atividades de forma eficiente através de um sistema de tags customizáveis.
+API RESTful para gerenciamento de tarefas e etiquetas, permitindo que usuários organizem suas atividades de forma eficiente através de um sistema de tags personalizáveis.
 
 ## 🚀 Funcionalidades Principais
 
-- Gerenciamento completo de tarefas (tasks)
+- Gerenciamento completo de tarefas
 - Sistema de etiquetas (tags) personalizáveis
 - Vinculação de múltiplas tags às tarefas
 - Autenticação segura via JWT
@@ -14,58 +14,76 @@ API RESTful para gerenciamento de tarefas e etiquetas, permitindo que usuários 
 
 ## 🛠️ Endpoints
 
-### Autenticação
+### 1. **Autenticação**
 
 #### Login
-```
-POST /auth/login
-```
-Realiza autenticação do usuário e retorna token JWT.
+**Endpoint**: `POST /auth/login`
 
-**Corpo da Requisição:**
+Realiza a autenticação do usuário e retorna o token JWT.
+
+**Corpo da Requisição**:
 ```json
 {
-    "username": "usuario_exemplo",
+    "email": "usuario_exemplo",
     "password": "senha"
 }
 ```
 
-**Resposta:**
+**Resposta**:
 ```json
 {
-    "token": "jwt_token_exemplo"
+    "token": "jwt_token_exemplo",
+
 }
 ```
 
-### Usuários
+### 2. **Usuários**
 
 #### Criar Usuário
-```
-POST /users
-```
-Cria novo usuário no sistema.
+**Endpoint**: `POST /users`
 
-**Corpo da Requisição:**
+Cria um novo usuário no sistema.
+
+**Corpo da Requisição**:
 ```json
 {
-    "username": "usuario_exemplo",
+    "email": "usuario_exemplo",
     "password": "senha"
 }
 ```
 
-### Tarefas (Tasks)
+### 3. **Tarefas (Tasks)**
 
 #### Listar Tarefas
+**Endpoint**: `GET /tasks`
+
+Retorna todas as tarefas do usuário autenticado. Aceita filtros via query params.
+
+**Exemplo de Requisição**:
+```http
+GET /tasks?priority=1&expirationDate=2024-12-31
 ```
-GET /tasks
+
+**Resposta**:
+```json
+[
+    {
+        "id": 1,
+        "title": "Nova Tarefa",
+        "description": "Descrição detalhada da tarefa",
+        "priority": 1,
+        "expirationDate": "2024-12-31",
+    },
+    ...
+]
 ```
-Retorna todas as tarefas do usuário. Aceita filtros via query params.
 
 #### Criar Tarefa
-```
-POST /tasks
-```
-**Corpo da Requisição:**
+**Endpoint**: `POST /tasks`
+
+Cria uma nova tarefa.
+
+**Corpo da Requisição**:
 ```json
 {
     "title": "Nova Tarefa",
@@ -75,30 +93,84 @@ POST /tasks
 }
 ```
 
+**Resposta**:
+```json
+{
+    "id": 1,
+    "title": "Nova Tarefa",
+    "description": "Descrição detalhada da tarefa",
+    "priority": 1,
+    "expirationDate": "2024-12-31"
+}
+```
+
 #### Atualizar Tarefa
+**Endpoint**: `PATCH /tasks/:id`
+
+Atualiza campos específicos de uma tarefa.
+
+**Corpo da Requisição**:
+```json
+{
+    "title": "Nova Tarefa Atualizada",
+    "description": "Descrição detalhada da tarefa",
+    "priority": 2,
+    "expirationDate": "2024-12-31"
+}
 ```
-PATCH /tasks/:id
+
+**Resposta**:
+```json
+{
+    "id": 1,
+    "title": "Nova Tarefa Atualizada",
+    "description": "Descrição detalhada da tarefa",
+    "priority": 2,
+    "expirationDate": "2024-12-31"
+}
 ```
-Atualiza campos específicos da tarefa.
 
 #### Excluir Tarefa
-```
-DELETE /tasks/:id
+**Endpoint**: `DELETE /tasks/:id`
+
+Exclui uma tarefa específica.
+
+**Resposta**:
+```json
+{
+    "message": "Tarefa excluída com sucesso"
+}
 ```
 
-### Etiquetas (Tags)
+### 4. **Etiquetas (Tags)**
 
 #### Listar Etiquetas
+**Endpoint**: `GET /tags`
+
+Retorna todas as etiquetas associadas ao usuário.
+
+**Resposta**:
+```json
+[
+    {
+        "id": 1,
+        "name": "Importante",
+        "color": "red"
+    },
+    {
+        "id": 2,
+        "name": "Urgente",
+        "color": "yellow"
+    }
+]
 ```
-GET /tags
-```
-Retorna todas as etiquetas do usuário.
 
 #### Criar Etiqueta
-```
-POST /tags
-```
-**Corpo da Requisição:**
+**Endpoint**: `POST /tags`
+
+Cria uma nova etiqueta.
+
+**Corpo da Requisição**:
 ```json
 {
     "name": "Importante",
@@ -106,13 +178,23 @@ POST /tags
 }
 ```
 
-### Relacionamento Task-Tag
+**Resposta**:
+```json
+{
+    "id": 1,
+    "name": "Importante",
+    "color": "red"
+}
+```
+
+### 5. **Relacionamento Task-Tag**
 
 #### Vincular Tag à Task
-```
-POST /tasktags
-```
-**Corpo da Requisição:**
+**Endpoint**: `POST /tasktags`
+
+Vincula uma tag a uma tarefa.
+
+**Corpo da Requisição**:
 ```json
 {
     "taskId": 1,
@@ -120,15 +202,38 @@ POST /tasktags
 }
 ```
 
+**Resposta**:
+```json
+{
+    "message": "Tag vinculada à tarefa com sucesso"
+}
+```
+
 #### Buscar Tasks por Tag
+**Endpoint**: `GET /tasktags/:tagId`
+
+Busca tarefas associadas a uma tag específica.
+
+**Resposta**:
+```json
+[
+    {
+        "id": 1,
+        "title": "Nova Tarefa",
+        "description": "Descrição detalhada da tarefa",
+        "priority": 1,
+        "expirationDate": "2024-12-31"
+    }
+]
 ```
-GET /tasktags/:tagId
-```
+
+---
 
 ## 🔒 Autenticação
 
-A API utiliza autenticação via Bearer Token JWT. Inclua o token em todas as requisições (exceto login e criação de usuário):
+A API utiliza autenticação via Bearer Token JWT. Inclua o token no cabeçalho de autorização de todas as requisições (exceto login e criação de usuário):
 
+**Exemplo de cabeçalho**:
 ```
 Authorization: Bearer jwt_token_exemplo
 ```
