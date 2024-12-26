@@ -1,65 +1,75 @@
 # API de Gerenciamento de Tarefas
 
-## Descrição Geral
+## 📝 Sobre
+API RESTful para gerenciamento de tarefas e etiquetas, permitindo que usuários organizem suas atividades de forma eficiente através de um sistema de tags customizáveis.
 
-Esta API permite que usuários gerenciem tarefas (tasks) e etiquetas (tags), possibilitando a vinculação entre elas. Uma tarefa pode ter múltiplas tags e uma tag pode estar vinculada a várias tarefas.
+## 🚀 Funcionalidades Principais
 
-## Principais Funcionalidades
+- Gerenciamento completo de tarefas (tasks)
+- Sistema de etiquetas (tags) personalizáveis
+- Vinculação de múltiplas tags às tarefas
+- Autenticação segura via JWT
+- Sistema de priorização de tarefas
+- Datas de expiração para tarefas
 
-- Gerenciamento de usuários (criar conta e autenticar)
-- Gerenciamento de tarefas (CRUD)
-- Gerenciamento de etiquetas (CRUD)
-- Vinculação entre tarefas e etiquetas
+## 🛠️ Endpoints
 
-## Autenticação
+### Autenticação
 
-A API utiliza autenticação via Token JWT.
-
-### Login
-
+#### Login
 ```
 POST /auth/login
+```
+Realiza autenticação do usuário e retorna token JWT.
 
-Requisição:
+**Corpo da Requisição:**
+```json
 {
-    "email": "email_exemplo",
+    "username": "usuario_exemplo",
     "password": "senha"
 }
-
-Para usar o token nas requisições, adicione no header:
-```
-Authorization: Bearer jwt_token_exemplo
 ```
 
-## Endpoints
+**Resposta:**
+```json
+{
+    "token": "jwt_token_exemplo"
+}
+```
 
-### Tasks
+### Usuários
+
+#### Criar Usuário
+```
+POST /users
+```
+Cria novo usuário no sistema.
+
+**Corpo da Requisição:**
+```json
+{
+    "username": "usuario_exemplo",
+    "password": "senha"
+}
+```
+
+### Tarefas (Tasks)
 
 #### Listar Tarefas
 ```
 GET /tasks
-
-Resposta:
-[
-    {
-        "id": 1,
-        "title": "Task 1",
-        "description": "Descrição da Task 1",
-        "status": "IN_PROGRESS",
-        "priority": 1,
-        "expirationDate": "2024-12-31"
-    }
-]
 ```
+Retorna todas as tarefas do usuário. Aceita filtros via query params.
 
 #### Criar Tarefa
 ```
 POST /tasks
-
-Requisição:
+```
+**Corpo da Requisição:**
+```json
 {
-    "title": "Task 1",
-    "description": "Descrição da Task 1",
+    "title": "Nova Tarefa",
+    "description": "Descrição detalhada da tarefa",
     "priority": 1,
     "expirationDate": "2024-12-31"
 }
@@ -68,83 +78,42 @@ Requisição:
 #### Atualizar Tarefa
 ```
 PATCH /tasks/:id
-
-Requisição:
-{
-    "title": "Task Atualizada",
-    "description": "Nova descrição da Task",
-    "status": "FINISHED",
-    "priority": 5,
-    "expirationDate": "2024-12-30"
-}
 ```
+Atualiza campos específicos da tarefa.
 
-#### Deletar Tarefa
+#### Excluir Tarefa
 ```
 DELETE /tasks/:id
 ```
 
-### Tags
+### Etiquetas (Tags)
 
-#### Listar Tags
+#### Listar Etiquetas
 ```
 GET /tags
-
-Resposta:
-{
-    "id": 1,
-    "name": "Tag 1",
-    "color": "white"
-}
 ```
+Retorna todas as etiquetas do usuário.
 
-#### Criar Tag
+#### Criar Etiqueta
 ```
 POST /tags
-
-Requisição:
+```
+**Corpo da Requisição:**
+```json
 {
-    "name": "Tag 1",
-    "color": "white"
+    "name": "Importante",
+    "color": "red"
 }
 ```
 
-#### Atualizar Tag
-```
-PATCH /tags/:id
+### Relacionamento Task-Tag
 
-Requisição:
-{
-    "name": "Tag Atualizada",
-    "color": "white"
-}
-```
-
-#### Deletar Tag
-```
-DELETE /tags/:id
-```
-
-### Relações Task-Tag
-
-#### Listar Relações
-```
-GET /tasktags
-
-Resposta:
-[
-    {
-        "taskId": 1,
-        "tagId": 1
-    }
-]
-```
-
-#### Criar Relação
+#### Vincular Tag à Task
 ```
 POST /tasktags
-
-Requisição:
+```
+**Corpo da Requisição:**
+```json
 {
     "taskId": 1,
     "tagId": 1
@@ -153,68 +122,23 @@ Requisição:
 
 #### Buscar Tasks por Tag
 ```
-GET /tasktags/:id
-
-Resposta:
-[
-    {
-        "task": {
-            "id": 1,
-            "title": "Task 1",
-            "description": "Descrição da Task 1",
-            "status": "IN_PROGRESS",
-            "priority": 1,
-            "expirationDate": "2024-12-31T23:59:59Z"
-        },
-        "tag": {
-            "id": 1,
-            "name": "Tag 1",
-            "color": "white"
-        }
-    }
-]
+GET /tasktags/:tagId
 ```
 
-#### Deletar Relação
-```
-DELETE /tasktags/:id
-```
+## 🔒 Autenticação
 
-### Usuários
+A API utiliza autenticação via Bearer Token JWT. Inclua o token em todas as requisições (exceto login e criação de usuário):
 
-#### Listar Informações do Usuário
 ```
-GET /users/:id
-
-Resposta:
-{
-    "id": 1,
-    "email": "email_exemplo",
-    "password": "senha_criptografada"
-}
+Authorization: Bearer jwt_token_exemplo
 ```
 
-#### Criar Usuário
-```
-POST /users
+## 📊 Status de Resposta
 
-Requisição:
-{
-    "email": "email_exemplo",
-    "password": "senha"
-}
-```
-
-#### Deletar Usuário
-```
-DELETE /users/:id
-```
-
-
-- `200 OK`: Requisição bem-sucedida
-- `201 Created`: Recurso criado com sucesso
-- `204 No Content`: Requisição bem-sucedida sem conteúdo de resposta
-- `400 Bad Request`: Erro nos parâmetros da requisição
-- `401 Unauthorized`: Token de autenticação inválido ou ausente
-- `404 Not Found`: Recurso não encontrado
-- `500 Internal Server Error`: Erro interno no servidor
+- `200` - OK: Requisição bem-sucedida
+- `201` - Created: Recurso criado com sucesso
+- `204` - No Content: Operação realizada com sucesso (sem retorno)
+- `400` - Bad Request: Erro nos parâmetros da requisição
+- `401` - Unauthorized: Token inválido ou ausente
+- `404` - Not Found: Recurso não encontrado
+- `500` - Internal Server Error: Erro interno no servidor
