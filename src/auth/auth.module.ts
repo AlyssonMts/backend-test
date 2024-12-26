@@ -26,7 +26,7 @@ import { UserModule } from '../user/user.module';
     forwardRef(() => UserModule),
     ConfigModule,
   ],
-  controllers: [AuthController,],  
+  controllers: [AuthController],  
   providers: [AuthService,JwtService],
   exports: [AuthService, JwtService,],
 })

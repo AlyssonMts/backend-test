@@ -26,13 +26,6 @@ Requisição:
     "password": "senha"
 }
 
-Resposta:
-{
-    "token": "jwt_token_exemplo",
-    "expiresIn": "3600"
-}
-```
-
 Para usar o token nas requisições, adicione no header:
 ```
 Authorization: Bearer jwt_token_exemplo

@@ -1,11 +1,12 @@
 import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { AuthModule } from './auth.module';
+import { UserRepository } from 'src/user/user.repository';
 
 @Injectable()
 export class AuthService {
-  private readonly SALT_ROUNDS = 10; // Número de rounds para hash da senha
+  private readonly SALT_ROUNDS = 10;
+  private readonly UserRepository = UserRepository; // Número de rounds para hash da senha
 
   constructor(private readonly jwtService: JwtService) {}
 

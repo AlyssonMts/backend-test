@@ -6,6 +6,7 @@ import { Request } from 'express';
 @Injectable()
 export class AuthGuard implements CanActivate {
   private jwtSecret: string;
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
@@ -14,6 +15,7 @@ export class AuthGuard implements CanActivate {
   }
   
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     
