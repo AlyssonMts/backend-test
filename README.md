@@ -71,6 +71,7 @@ GET /tasks?priority=1&expirationDate=2024-12-31
         "id": 1,
         "title": "Nova Tarefa",
         "description": "Descrição detalhada da tarefa",
+        "status": "IN_PROGRESS",
         "priority": 1,
         "expirationDate": "2024-12-31",
     },
@@ -100,6 +101,7 @@ Cria uma nova tarefa.
     "title": "Nova Tarefa",
     "description": "Descrição detalhada da tarefa",
     "priority": 1,
+    "status": "IN_PROGRESS",
     "expirationDate": "2024-12-31"
 }
 ```
@@ -115,6 +117,7 @@ Atualiza campos específicos de uma tarefa.
     "title": "Nova Tarefa Atualizada",
     "description": "Descrição detalhada da tarefa",
     "priority": 2,
+    "status": "FINISHED",
     "expirationDate": "2024-12-31"
 }
 ```
@@ -126,6 +129,7 @@ Atualiza campos específicos de uma tarefa.
     "title": "Nova Tarefa Atualizada",
     "description": "Descrição detalhada da tarefa",
     "priority": 2,
+    "status": "FINISHED",
     "expirationDate": "2024-12-31"
 }
 ```
